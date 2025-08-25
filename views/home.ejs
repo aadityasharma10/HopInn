@@ -1,0 +1,41 @@
+<%- include('../includes/navbar') %>
+
+<div class="container mt-5 text-center">
+  <% if (success) { %>
+    <div class="alert alert-success mt-3"><%= success %></div>
+  <% } %>
+  <% if (error) { %>
+    <div class="alert alert-danger mt-3"><%= error %></div>
+  <% } %>
+
+  <h1>Welcome to Wanderlust!</h1>
+  <p class="lead">Discover amazing homes and destinations around the world.</p>
+
+  <a href="/listings" class="btn btn-primary btn-lg mt-3">Explore Listings</a>
+</div>
+
+<hr class="my-5">
+
+<div class="container">
+  <h2 class="mb-4 text-center">Latest Listings</h2>
+  <div class="row">
+    <% if(listings.length === 0) { %>
+      <p class="text-center">No listings available yet!</p>
+    <% } %>
+
+    <% listings.forEach(listing => { %>
+      <div class="col-md-3 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img src="<%= listing.image %>" class="card-img-top" alt="<%= listing.title %>">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title"><%= listing.title %></h5>
+            <p class="card-text">&#8377; <%= listing.price %></p>
+            <a href="/listings/<%= listing._id %>" class="btn btn-primary mt-auto">View</a>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+<%- include('../includes/footer') %>
