@@ -15,7 +15,7 @@ module.exports.signup = async (req, res) => {
             if(err){
                 return next(err);
             }
-            req.flash("success",username ,"Welcome to WanderLust!");
+            req.flash("success",username ,"Welcome to HopInn!");
             res.redirect("/listings");
         })
         
@@ -31,7 +31,7 @@ module.exports.renderLoginForm = (req,res) => {
 
 module.exports.login = async (req,res) => {
 
-    req.flash("success"," Welcome back to WanderLust! ");
+    req.flash("success"," Welcome back to HopInn! ");
     let redirectUrl = res.locals.redirectUrl || "/listings";
     res.redirect(redirectUrl);
 };
