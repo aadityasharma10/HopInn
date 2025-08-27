@@ -101,9 +101,13 @@ app.all('*', (req, res, next) => {
 
 // Error handler
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = 'Something went wrong!' } = err;
-  res.status(statusCode).render('error', { message });
+  console.error("🔥 ERROR STACK >>>", err);   // Logs full error to terminal
+
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Something went wrong!";
+  res.status(statusCode).render("error", { message });
 });
+
 
 // Start server
 const port = process.env.PORT || 8080;

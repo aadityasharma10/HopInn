@@ -66,14 +66,21 @@ module.exports.editListing = async (req,res) => {
 module.exports.updateListing = async (req,res) => {
     let {id} = req.params;
      let listing = await Listing.findByIdAndUpdate(id, {...req.body.listing});
-     if(typeof req.file !== "undefined"){
+     const { cloudinary } = require("../cloudConfig");
 
-     let url = req.file.path;
-     let filename = req.file.filename;
-     listing.image = {url,filename};
-     await listing.save();
+if (typeof req.file !== "undefined") {
+  // Delete old image from Cloudinary
+  if (listing.image && listing.image.filename) {
+    await cloudinary.uploader.destroy(listing.image.filename);
+  }
 
-     }
+  // Save new image
+  let url = req.file.path;
+  let filename = req.file.filename;
+  listing.image = { url, filename };
+  await listing.save();
+}
+
      req.flash("success","Listing updated!");
      res.redirect(`/listings/${id}`);
      
@@ -81,7 +88,13 @@ module.exports.updateListing = async (req,res) => {
 
 module.exports.deleteListing = async (req,res ) => {
     let {id} = req.params;
-    let deletedListing =  await Listing.findByIdAndDelete(id);
+    const { cloudinary } = require("../cloudConfig");
+
+let deletedListing = await Listing.findByIdAndDelete(id);
+if (deletedListing && deletedListing.image && deletedListing.image.filename) {
+  await cloudinary.uploader.destroy(deletedListing.image.filename);
+}
+
     console.log(deletedListing);
     req.flash("success","Listing deleted!");
     res.redirect("/listings");
